@@ -13,7 +13,7 @@ class Neighborhood(models.Model):
     logo = models.ImageField(upload_to = 'images/')
 
     def __str__(self):
-        return self.neighborhood()
+        return self.neighborhood
 
     def create_neighborhood(self):
         self.save()
@@ -35,12 +35,38 @@ class Profile(models.Model):
     contact = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
-        return self.user()
+        return self.user
+
+    def save_user_profile(self):
+        self.save()
 
     @classmethod
     def get_hood_members(cls,hood):
         members=cls.objects.filter(hood__icontains=hood)
         return members
+
+class Business(models.Model):
+    name = models.CharField(max_length=300)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owner')
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='business')
+    email = models.EmailField(max_length=100)
+    description = models.TextField(max_length=1000)
+    
+    def __str__(self):
+        return self.name
+
+    def create_business(self):
+        self.save()
+
+    def delete_business(self):
+        self.delete()
+    
+    @classmethod
+    def find_business(cls,business_id):
+        found=cls.objects.get(id=business_id)
+        return found
+
+
 
 
 
