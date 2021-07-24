@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hood.apps.HoodConfig',
     'bootstrap4',
-    'pyuploadcare'
+    'pyuploadcare.dj'
 ]
 
 MIDDLEWARE = [
@@ -73,6 +73,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'neighborhood.wsgi.application'
+
+
+UPLOADCARE = {
+    'pub_key': 'hy78j4567809234',
+    'secret': '45908723570971825634',
+}
 
 
 # Database
