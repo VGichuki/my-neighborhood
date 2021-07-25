@@ -1,6 +1,21 @@
-{%extends 'base.html'%}
+{% extends 'base.html'%}
 
-{% block content%}
-{{block.super}}
-<h1 class="text-center">Hoods</h1>
+{%block content %}
+<div class="container">
+    <h1 style="text-align: center;">Hoods</h1>
+    <div class="row">
+        {%for neighborhood in hoods %}
+        <div class="card">
+            <h1 class="card-title">Name:{{neighborhood.name}}</h1>
+            <img class="card-img-top" src="{{neighborhood.logo.url}}" width="450px" height="450px">
+            <div class="card-body">
+                <p class="card-text">Description:{{neighborhood.description}}</p>
+                <p class="card-text">Location:{{neighborhood.location}}</p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 {% endblock %}
