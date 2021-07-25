@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hood.apps.HoodConfig',
     'bootstrap4',
-    'pyuploadcare.dj'
+    'pyuploadcare.dj',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [

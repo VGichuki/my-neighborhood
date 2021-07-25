@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from .models import Neighborhood,Profile,Business,Post
+from .forms import CreateHoodForm
 
 # Create your views here.
 def index(request):
