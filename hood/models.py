@@ -7,8 +7,8 @@ class Neighborhood(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     admin = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name='hood')
-    health_department = models.IntegerField(null=True, blank=True)
-    police_department = models.IntegerField(null=True, blank=True)
+    health_department = models.TextField(null=True, blank=True)
+    police_department = models.TextField(null=True, blank=True)
     description = models.TextField()
     logo = models.ImageField(upload_to = 'images/', default='')
 
