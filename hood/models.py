@@ -10,10 +10,10 @@ class Neighborhood(models.Model):
     health_department = models.IntegerField(null=True, blank=True)
     police_department = models.IntegerField(null=True, blank=True)
     description = models.TextField()
-    logo = models.ImageField(upload_to = 'images/')
+    logo = models.ImageField(upload_to = 'images/', default='')
 
     def __str__(self):
-        return self.neighborhood
+        return self.name
 
     def create_neighborhood(self):
         self.save()
@@ -25,6 +25,9 @@ class Neighborhood(models.Model):
     def find_neighborhood(cls, neighborhood_id):
         return cls.objects.filter(id=neighborhood_id)
 
+    class Meta:
+        ordering =['-pk']
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     name = models.CharField(max_length=50, blank=True)
@@ -35,7 +38,7 @@ class Profile(models.Model):
     contact = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
     def save_user_profile(self):
         self.save()
@@ -75,6 +78,16 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def create_post(self):
+        self.save()
+
+    def delete_post(self):
+        self.delete()
+
+    class Meta:
+        ordering =['-pk']
+
 
     
 
