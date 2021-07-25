@@ -8,3 +8,15 @@ def index(request):
     hoods = Neighborhood.objects.all()
     return render(request, 'index.html', {'hoods': hoods})
 
+def create_hood(request):
+    if request.method == 'POST':
+        form = CreateHoodForm(request.POST, request.FILES)
+        if form.is_valid():
+            hood = form.save(commit=False)
+            hood.admin = request.user.profile
+            hood.save()
+            return redirect('hood')
+    else:
+        form = CreateHoodForm()
+    return render(request, 'hood.html', {'form': form})
+
