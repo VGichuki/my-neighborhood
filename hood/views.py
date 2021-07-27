@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from .models import Neighborhood,Profile,Business,Post
-from .forms import CreateHoodForm,HoodBusinessForm, PostForm, CreateUserForm
+from .forms import CreateHoodForm,HoodBusinessForm, PostForm, CreateUserForm, UserProfileForm
 # from django.views.generic.edit import DeleteView
 # from django.urls import reverse_lazy
 from django.contrib.auth.models import User
@@ -53,6 +53,23 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
+@login_required(login_url='login') 
+def profile(request, username):
+    return render(request, 'profile.html')
+
+@login_required(login_url='login') 
+def update_profile(request, username):
+    user = User.objects.get(username=username)
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', user.username)
+    else:
+        form = UserProfileForm(instance=request.user.profile)
+    return render(request, 'updateprofile.html', {'form': form})
+   
 
 @login_required(login_url='login') 
 def create_hood(request):
