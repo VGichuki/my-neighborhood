@@ -7,9 +7,9 @@ from django.conf.urls.static import static
 urlpatterns=[
     path('',views.index, name ='index'),
     path('new-hood/', views.create_hood, name='new-hood'),
-    path('single-hood/<int:id>/', views.single_hood, name='single-hood'),
-    path('<hood_id>/new-post', views.create_post, name='post'),
-    path('<hood_id>/members', views.hood_members, name='members'),
+    path('single-hood/<id>/', views.single_hood, name='single-hood'),
+    path('<id>/new-post', views.create_post, name='post'),
+    path('<id>/members', views.hood_members, name='members'),
     path('register/', views.registerPage, name='register'),
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name='logout'),
