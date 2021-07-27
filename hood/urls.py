@@ -14,7 +14,10 @@ urlpatterns=[
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name='logout'),
     path('profile/<username>/', views.profile, name='profile'),
-    path('profile/<username>/update/', views.update_profile, name='update')
+    path('profile/<username>/update/', views.update_profile, name='update'),
+    # path('join/<id>/', views.leave_hood, name='join'),
+    # path('leave/<id>/', views.leave_hood, name='leave'),
+    path('search/', views.search, name='search'),
 ]
 if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
