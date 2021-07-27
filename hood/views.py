@@ -84,22 +84,34 @@ def create_hood(request):
         form = CreateHoodForm()
     return render(request, 'hood.html', {'form': form})
 
-def single_hood(request,id):
+def hood(request, id):
     hood = Neighborhood.objects.get(id=id)
-    if request.method =='POST':
+    members = Profile.objects.filter(hood=hood)
+    business = Business.objects.filter(neighborhood=hood)
+    posts = Post.objects.filter(hood=hood)
+    context={
+        'hood': hood,
+        'members': members,
+        'business': business,
+        'posts': posts,
+    }
+    return render(request, 'hoodie.html', context)
+
+def create_business(request, id):
+    hood = Neighborhood.objects.get(id=id)
+    if request.method == 'POST':
         form = HoodBusinessForm(request.POST)
         if form.is_valid():
             business_form = form.save(commit=False)
-            business_form.neighborhood = hood
+            business_form.hood = hood
             business_form.user = request.user.profile
             business_form.save()
-        return redirect('index')
+            return redirect('hood', hood.id)
     else:
         form = HoodBusinessForm()
     return render(request, 'business.html', {'form': form})
 
-@login_required(login_url='login') 
-def create_post(request,id):
+def create_post(request, id):
     hood = Neighborhood.objects.get(id=id)
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -108,17 +120,12 @@ def create_post(request,id):
             post.hood = hood
             post.user = request.user.profile
             post.save()
-            return redirect('single-hood')
+            return redirect('hood', hood.id)
     else:
         form = PostForm()
     return render(request, 'postform.html', {'form': form})
 
-@login_required(login_url='login') 
-def hood_members(request, id):
-    hood = Neighborhood.objects.get(id=id)
-    members = Profile.objects.filter(neighborhood=hood)
-    return render(request, 'members.html', {'members': members})
- 
+
 # class DeleteHoodView(DeleteView):
 #     model = Neighborhood
 #     template_name = 'delete_hood.html'
