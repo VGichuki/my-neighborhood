@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -18,36 +19,42 @@ def index(request):
     return render(request, 'index.html', {'hoods': hoods})
 
 def registerPage(request):
-    form = CreateUserForm
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, 'Account was created for ' + user)
-            return redirect('login')
-    context = {'form': form}
-    return render(request, 'accounts/register.html', context)
+    if request.user.is_authenticated:
+        return redirect('index')
+    else:
+        form = CreateUserForm
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                user = form.cleaned_data.get('username')
+                messages.success(request, 'Account was created for ' + user)
+                return redirect('login')
+        context = {'form': form}
+        return render(request, 'accounts/register.html', context)
 
 def loginPage(request):
-    if request.method == 'POST':
-        username =request.POST.get('username')
-        password = request.POST.get('password')
-        
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            messages.info(request, 'Username or password is incorrect')
-            
-    context={}
-    return render(request, 'accounts/login.html', context)
+    if request.user.is_authenticated:
+        return redirect('index')
+    else:
+        if request.method == 'POST':
+            username =request.POST.get('username')
+            password =request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+            else:
+                messages.info(request, 'Username OR password is incorrect')
+        context={}
+        return render(request, 'accounts/login.html', context)
 
 def logoutUser(request):
     logout(request)
     return redirect('login')
 
+@login_required(login_url='login') 
 def create_hood(request):
     if request.method == 'POST':
         form = CreateHoodForm(request.POST, request.FILES)
@@ -74,8 +81,9 @@ def single_hood(request,id):
         form = HoodBusinessForm()
     return render(request, 'business.html', {'form': form})
 
-def create_post(request, hood_id):
-    hood = Neighborhood.objects.get(id=hood_id)
+@login_required(login_url='login') 
+def create_post(request,id):
+    hood = Neighborhood.objects.get(id=id)
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -83,16 +91,17 @@ def create_post(request, hood_id):
             post.hood = hood
             post.user = request.user.profile
             post.save()
-            return redirect('single-hood', hood_id)
+            return redirect('single-hood')
     else:
         form = PostForm()
     return render(request, 'postform.html', {'form': form})
 
-def hood_members(request, hood_id):
-    hood = Neighborhood.objects.get(id=hood_id)
+@login_required(login_url='login') 
+def hood_members(request, id):
+    hood = Neighborhood.objects.get(id=id)
     members = Profile.objects.filter(neighborhood=hood)
     return render(request, 'members.html', {'members': members})
-
+ 
 # class DeleteHoodView(DeleteView):
 #     model = Neighborhood
 #     template_name = 'delete_hood.html'
