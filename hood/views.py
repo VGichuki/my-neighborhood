@@ -3,15 +3,35 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from .models import Neighborhood,Profile,Business,Post
-from .forms import CreateHoodForm,HoodBusinessForm, PostForm
+from .forms import CreateHoodForm,HoodBusinessForm, PostForm, CreateUserForm
 # from django.views.generic.edit import DeleteView
 # from django.urls import reverse_lazy
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login,logout
+
 
 # Create your views here.
 def index(request):
     hoods = Neighborhood.objects.all()
     return render(request, 'index.html', {'hoods': hoods})
+
+def registerPage(request):
+    form = CreateUserForm
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + user)
+            return redirect('login')
+    context = {'form': form}
+    return render(request, 'accounts/register.html', context)
+
+def loginPage(request):
+    context={}
+    return render(request, 'accounts/login.html', context)
 
 def create_hood(request):
     if request.method == 'POST':
