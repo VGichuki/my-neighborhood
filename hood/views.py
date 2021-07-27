@@ -103,7 +103,7 @@ def create_business(request, id):
         form = HoodBusinessForm(request.POST)
         if form.is_valid():
             business_form = form.save(commit=False)
-            business_form.hood = hood
+            business_form.neighborhood = hood
             business_form.user = request.user.profile
             business_form.save()
             return redirect('hood', hood.id)
@@ -125,6 +125,29 @@ def create_post(request, id):
         form = PostForm()
     return render(request, 'postform.html', {'form': form})
 
+def search(request):
+    if 'business' in request.GET and request.GET['business']:
+        search = request.GET.get('business')
+        business = Business.search_business(search)
+        message = f'{search}'
+        context = {'business': business, 'search': search}
+        return render(request, 'search.html', context)
+    else:
+        message ="Not found"
+        return render(request, 'search.html', {'message': message})
+
+# @login_required(login_url='login') 
+# def join_hood(request, id):
+#     hood = get_object_or_404(Neighborhood, id=id)
+#     request.user.profile.neighborhood = hood
+#     request.user.profile.save()
+#     return redirect('hood')
+
+# def leave_hood(request,id):
+#     neighborhood = get_object_or_404(Neighborhood, id=id)
+#     request.user.profile.neighborhood = None
+#     request.user.profile.save()
+#     return redirect('hood')
 
 # class DeleteHoodView(DeleteView):
 #     model = Neighborhood
