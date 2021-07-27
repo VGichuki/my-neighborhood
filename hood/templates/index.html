@@ -1,23 +1,29 @@
 {% extends 'base.html'%}
 
 {%block content %}
+<style>
+    body{
+        background-color: rgb(248, 247, 247);
+    }
+</style>
 <div class="container">
     <h1 style="text-align: center;">Hoods</h1>
-    <div class="row">
         {%for neighborhood in hoods %}
         <div class="card">
-            <div class="col-md-4">
-                <h1 class="card-title">Name:{{neighborhood.name}}</h1>
-            <img class="img-responsive" src="{{neighborhood.logo.url}} " alt="Image" width="450px" height="450px">
+            <div class="col-md-4"></div>
+            <div class="col-md-6">
+                <img class="img-responsive" src="{{neighborhood.logo.url}} " alt="Image">
+            <h1 class="card-title">Name:{{neighborhood.name}}</h1>
             <div class="card-body">
                 <p class="card-text">Description:{{neighborhood.description}}</p>
                 <p class="card-text">Location:{{neighborhood.location}}</p>
-                
             </div>
             </div>
-        </div>
-    </div>
-</div>
+            <div class="col-md-2"></div>
+            
 {% endfor %}
+</div>
+
+</div>
 
 {% endblock %}
