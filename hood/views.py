@@ -32,7 +32,7 @@ def registerPage(request):
 def loginPage(request):
     if request.method == 'POST':
         username =request.POST.get('username')
-        password = request.POST.grt('password')
+        password = request.POST.get('password')
         
         user = authenticate(request, username=username, password=password)
         if user is not None:
@@ -43,6 +43,10 @@ def loginPage(request):
             
     context={}
     return render(request, 'accounts/login.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
 
 def create_hood(request):
     if request.method == 'POST':
