@@ -10,6 +10,8 @@ urlpatterns=[
     path('single-hood/<int:id>/', views.single_hood, name='single-hood'),
     path('<hood_id>/new-post', views.create_post, name='post'),
     path('<hood_id>/members', views.hood_members, name='members'),
+    path('register/', views.registerPage, name='register'),
+    path('login/', views.loginPage, name='login'),
 ]
 if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
