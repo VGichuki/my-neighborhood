@@ -1,0 +1,49 @@
+{% extends 'base.html'%}
+
+{% block content%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-1">
+            <img class="card-img-top" src="{{neighborhood.logo.url}}" alt="">
+        </div>
+        <div class="col-md-3">
+            <h3>{{user.profile.neighbourhood.name}}</h3>
+            <h5 class="card-text">
+                <span><strong>{{members.count}}</strong> Member{{members.count|pluralize}}</span>
+                | <strong>{{ business.count }}</strong> Businesses | <strong>
+                {{ neighbourhood.post.count }}</strong> Post{{ neighbourhood.post.count|pluralize }}
+            </h5>
+            <p class="card-text">Police department: {{neighbourhood.police_department}}</p>
+            <p class="card-text">Health department: {{neighbourhood.health_department}}</p>
+
+            <a class="btn btn-sm btn-light" href="{% url 'business' hood.id%}">Add business</a>
+            <a class="btn btn-sm btn-light" href="{% url 'post' hood.id%}">Add post</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Posts</h3>
+            {% for post in posts %}
+            <div class="card">
+                <h5>{{post.title}}</h5>
+                <p>{{post.post}}</p>
+                <p class="text-muted">{{post.posted_on}}</p>
+            </div>
+            {%endfor%}
+        </div>
+        <div class="col-md-4">
+            <h3>Business</h3>
+            {% for business in business %}
+            <div class="card">
+                <h5>{{business.name}}</h5>
+                <p>Details: {{business.ddescription}}</p>
+                <p>Email: {{business.email}}</p>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+{%endblock%}
